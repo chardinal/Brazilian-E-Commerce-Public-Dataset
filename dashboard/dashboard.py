@@ -249,12 +249,12 @@ def fig_row(ncols, w=14, h=4.5):
 def load():
     try:
         return (
-            pd.read_csv("revenue_by_category.csv"),
-            pd.read_csv("rfm_df.csv"),
-            pd.read_csv("monthly_trend.csv"),
-            pd.read_csv("payment_freq.csv"),
-            pd.read_csv("delivery_review.csv"),
-            pd.read_csv("main_df.csv", parse_dates=["order_purchase_timestamp"]),
+            pd.read_csv("dashboard/revenue_by_category.csv")
+            pd.read_csv("dashboard/rfm_df.csv")
+            pd.read_csv("dashboard/monthly_trend.csv")
+            pd.read_csv("dashboard/payment_freq.csv")
+            pd.read_csv("dashboard/delivery_review.csv")
+            pd.read_csv("dashboard/main_df.csv", parse_dates=["order_purchase_timestamp"])
         )
     except FileNotFoundError as e:
         st.error(f"File tidak ditemukan: {e}\nJalankan notebook terlebih dahulu.")
