@@ -2,15 +2,6 @@
 
 Dashboard interaktif untuk menganalisis data transaksi e-commerce Brasil dari platform Olist.
 
----
-
-## 👤 Identitas
-
-| | |
-|---|---|
-| **Nama** | Chardinal Martin Butarbutar |
-| **Email** | chardinal.23288@mhs.unesa.ac.id |
-| **ID Dicoding** | chardinal_martin_butarbutar_jkPl |
 
 ---
 
@@ -80,7 +71,7 @@ Dashboard akan terbuka otomatis di browser pada `http://localhost:8501`
 
 Akses dashboard secara online:
 
-**[🔗 Klik di sini untuk membuka dashboard](https://nama-app.streamlit.app)**
+**[🔗 Klik di sini untuk membuka dashboard]([https://nama-app.streamlit.app](https://project2-brazilian-e-commerce-public-dataset.streamlit.app/))**
 
 ---
 
