@@ -71,7 +71,7 @@ Dashboard akan terbuka otomatis di browser pada `http://localhost:8501`
 
 Akses dashboard secara online:
 
-**[🔗 Klik di sini untuk membuka dashboard]([https://nama-app.streamlit.app](https://project2-brazilian-e-commerce-public-dataset.streamlit.app/))**
+**[🔗 Klik di sini untuk membuka dashboard](https://project2-brazilian-e-commerce-public-dataset.streamlit.app/)**
 
 ---
 
