@@ -22,10 +22,10 @@ st.set_page_config(
 
 # ─── Color Palette ────────────────────────────────────────────
 C = {
-    "bg":       "#F7F9FC",
+    "bg":       "#F8FAFC", # Sedikit dicerahkan ke nuansa Slate
     "white":    "#FFFFFF",
-    "text":     "#1A202C",
-    "muted":    "#718096",
+    "text":     "#1E293B", # Sedikit ditegaskan ke nuansa Slate gelap
+    "muted":    "#64748B",
     "border":   "#E2E8F0",
     "primary":  "#2563EB",
     "green":    "#059669",
@@ -51,7 +51,8 @@ plt.rcParams.update({
     "axes.grid":         True,
     "grid.color":        C["border"],
     "grid.linewidth":    0.6,
-    "grid.alpha":        1.0,
+    "grid.alpha":        0.8, # Dibuat sedikit transparan agar elegan
+    "grid.linestyle":    "--", # Garis grid putus-putus
     "xtick.color":       C["muted"],
     "ytick.color":       C["muted"],
     "xtick.labelsize":   9,
@@ -59,80 +60,75 @@ plt.rcParams.update({
     "text.color":        C["text"],
     "legend.frameon":    False,
     "legend.fontsize":   9,
-    "font.family":       "DejaVu Sans",
+    "font.family":       "sans-serif",
+    "figure.dpi":        300, # INI PENTING: Bikin grafik resolusi tinggi & tajam
 })
 
 # ─── Global CSS ───────────────────────────────────────────────
 st.markdown(f"""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
 
 html, body, [class*="css"] {{
-    font-family: 'Inter', sans-serif;
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
     background-color: {C['bg']};
     color: {C['text']};
 }}
 .stApp {{ background-color: {C['bg']}; }}
 
-/* Fix Material Icons gagal load — sembunyikan teks fallback */
+/* Fix Material Icons */
 [data-testid="stIconMaterial"] {{
     font-size: 0 !important;
     visibility: hidden;
-}}
-[data-testid="stSidebarCollapseButton"] button {{
-    width: 2rem;
-    height: 2rem;
-}}
-[data-testid="stSidebarCollapseButton"] button::after {{
-    content: "‹";
-    font-size: 1.2rem;
-    color: {C['muted']};
-    visibility: visible;
-    display: block;
-}}
-[data-testid="stSidebarNavCollapseIcon"] {{
-    visibility: hidden;
-    font-size: 0 !important;
 }}
 
 /* Sidebar */
 [data-testid="stSidebar"] {{
     background-color: {C['white']};
     border-right: 1px solid {C['border']};
+    box-shadow: 2px 0 10px rgba(0,0,0,0.02); /* Bayangan halus sidebar */
 }}
-[data-testid="stSidebar"] * {{ font-family: 'Inter', sans-serif !important; }}
+[data-testid="stSidebar"] * {{ font-family: 'Plus Jakarta Sans', sans-serif !important; }}
 
 /* Page title */
 .page-title {{
-    font-size: 1.45rem;
+    font-size: 1.65rem;
     font-weight: 700;
     color: {C['text']};
     margin-bottom: 0.15rem;
     line-height: 1.3;
+    letter-spacing: -0.02em;
 }}
 .page-sub {{
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     color: {C['muted']};
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
 }}
 
 /* KPI card */
 .kpi {{
     background: {C['white']};
     border: 1px solid {C['border']};
-    border-radius: 10px;
-    padding: 1.1rem 1.25rem;
+    border-radius: 12px; /* Sudut lebih membulat */
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05); /* Bayangan default */
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}}
+.kpi:hover {{
+    transform: translateY(-3px); /* Efek naik saat di-hover */
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+    border-color: #93C5FD;
 }}
 .kpi-label {{
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 700;
     color: {C['muted']};
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    margin-bottom: 0.35rem;
+    margin-bottom: 0.4rem;
 }}
 .kpi-value {{
-    font-size: 1.6rem;
+    font-size: 1.7rem;
     font-weight: 700;
     color: {C['text']};
     line-height: 1.1;
@@ -140,7 +136,8 @@ html, body, [class*="css"] {{
 .kpi-note {{
     font-size: 0.75rem;
     color: {C['muted']};
-    margin-top: 0.2rem;
+    margin-top: 0.4rem;
+    font-weight: 500;
 }}
 
 /* Chart card */
@@ -152,64 +149,83 @@ html, body, [class*="css"] {{
     margin-bottom: 1rem;
 }}
 .chart-title {{
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 600;
     color: {C['text']};
     margin-bottom: 0.15rem;
 }}
 .chart-sub {{
-    font-size: 0.78rem;
+    font-size: 0.8rem;
     color: {C['muted']};
-    margin-bottom: 0.8rem;
+    margin-bottom: 1rem;
 }}
 
 /* Section label */
 .section-label {{
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     font-weight: 700;
-    color: {C['muted']};
+    color: {C['text']};
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    margin: 1.5rem 0 0.75rem;
-    border-bottom: 1px solid {C['border']};
-    padding-bottom: 0.4rem;
+    margin: 2rem 0 1rem;
+    border-bottom: 2px solid {C['border']};
+    padding-bottom: 0.5rem;
 }}
 
 /* Insight */
 .insight {{
-    background: #EFF6FF;
-    border-left: 3px solid {C['primary']};
-    border-radius: 0 6px 6px 0;
-    padding: 0.75rem 1rem;
-    font-size: 0.82rem;
+    background: linear-gradient(145deg, #F0F9FF 0%, #FFFFFF 100%);
+    border-left: 4px solid {C['primary']};
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    font-size: 0.9rem;
     color: {C['text']};
-    line-height: 1.65;
-    margin-top: 1rem;
+    line-height: 1.6;
+    margin-top: 1.5rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
 }}
-.insight b {{ color: {C['primary']}; }}
+.insight b {{ color: {C['primary']}; font-weight: 600; }}
 
 /* Segment badge */
 .seg-badge {{
     display: inline-block;
-    border-radius: 6px;
-    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
     text-align: center;
     min-width: 100px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
 }}
+.seg-badge:hover {{ transform: scale(1.03); }}
 .seg-badge .val {{
-    font-size: 1.35rem;
+    font-size: 1.45rem;
     font-weight: 700;
     line-height: 1.1;
 }}
 .seg-badge .lbl {{
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: 600;
-    margin-top: 0.15rem;
-    opacity: 0.85;
+    margin-top: 0.2rem;
+}}
+
+/* Custom Box untuk Pertanyaan Bisnis */
+.qa-box {{
+    background: {C['white']}; 
+    border: 1px solid {C['border']};
+    border-radius: 10px; 
+    padding: 1.25rem; 
+    height: 100%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    transition: all 0.2s ease;
+}}
+.qa-box:hover {{
+    box-shadow: 0 8px 12px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+    border-color: #BFDBFE;
 }}
 
 /* Divider */
-hr {{ border: none; border-top: 1px solid {C['border']}; margin: 1.25rem 0; }}
+hr {{ border: none; border-top: 1px solid {C['border']}; margin: 1.5rem 0; }}
 </style>
 """, unsafe_allow_html=True)
 
@@ -228,7 +244,8 @@ def section(title):
     st.markdown(f'<div class="section-label">{title}</div>', unsafe_allow_html=True)
 
 def insight(text):
-    st.markdown(f'<div class="insight">{text}</div>', unsafe_allow_html=True)
+    # Menambahkan icon bohlam agar terkesan lebih profesional
+    st.markdown(f'<div class="insight">💡 <b>Business Insight:</b><br>{text}</div>', unsafe_allow_html=True)
 
 def fig_clean(w=10, h=4):
     fig, ax = plt.subplots(figsize=(w, h))
@@ -266,8 +283,8 @@ rev_df, rfm_df, mo_df, pay_df, del_df, main_df = load()
 with st.sidebar:
     st.markdown("""
     <div style="padding: 0.5rem 0 1rem;">
-        <div style="font-size:1.05rem; font-weight:700; color:#1A202C;">📊 Olist Dashboard</div>
-        <div style="font-size:0.78rem; color:#718096; margin-top:0.2rem;">Brazilian E-Commerce · Dicoding</div>
+        <div style="font-size:1.2rem; font-weight:800; color:#1E293B;">📊 Olist Dashboard</div>
+        <div style="font-size:0.8rem; font-weight:500; color:#2563EB; margin-top:0.3rem;">Brazilian E-Commerce · Dicoding</div>
     </div>""", unsafe_allow_html=True)
 
     st.divider()
@@ -284,16 +301,17 @@ with st.sidebar:
     st.divider()
 
     if "order_purchase_timestamp" in main_df.columns:
+        st.markdown('<div style="font-size:0.8rem; font-weight:600; margin-bottom:0.5rem; color:#64748B;">FILTER TANGGAL TRANSAKSI</div>', unsafe_allow_html=True)
         mn = main_df["order_purchase_timestamp"].min().date()
         mx = main_df["order_purchase_timestamp"].max().date()
-        dr = st.date_input("Filter Tanggal", [mn, mx], min_value=mn, max_value=mx)
+        dr = st.date_input("Pilih Tanggal", [mn, mx], min_value=mn, max_value=mx, label_visibility="collapsed")
     else:
         dr = None
 
     st.divider()
     st.markdown(f"""
-    <div style="font-size:0.73rem; color:#718096; line-height:1.7;">
-        <b style="color:#1A202C;">Sumber</b><br>
+    <div style="font-size:0.75rem; color:#64748B; line-height:1.7; text-align:center;">
+        <b style="color:#1E293B;">Sumber Data</b><br>
         Olist Brazilian E-Commerce<br>
         Kaggle Public Dataset
     </div>""", unsafe_allow_html=True)
@@ -342,9 +360,9 @@ if page == "Overview":
             fig, ax = fig_clean(9, 3.5)
             x = np.arange(len(mo_df))
             ax.bar(x, mo_df["total_orders"], color=C["primary"], alpha=0.25, width=0.7)
-            ax.plot(x, mo_df["total_orders"], color=C["primary"], linewidth=1.5, label="Orders")
+            ax.plot(x, mo_df["total_orders"], color=C["primary"], linewidth=1.5, marker='o', markersize=3, label="Orders")
             if "orders_MA3" in mo_df.columns:
-                ax.plot(x, mo_df["orders_MA3"], color=C["red"], linewidth=1.8,
+                ax.plot(x, mo_df["orders_MA3"], color=C["amber"], linewidth=1.8,
                         linestyle="--", label="3-Month MA")
             step = max(1, len(mo_df) // 8)
             ax.set_xticks(x[::step])
@@ -367,6 +385,8 @@ if page == "Overview":
             wedgeprops=dict(width=0.55, edgecolor="white", linewidth=1.5),
         )
         for at in autotexts:
+            at.set_color('white')
+            at.set_weight('bold')
             at.set_fontsize(8.5)
         ax.legend(wedges, pay_df["payment_type"].str.replace("_", " ").str.title(),
                   loc="lower center", bbox_to_anchor=(0.5, -0.15),
@@ -391,12 +411,11 @@ if page == "Overview":
     for col, (icon, title, desc) in zip(q_cols, questions):
         with col:
             st.markdown(f"""
-            <div style="background:{C['white']}; border:1px solid {C['border']};
-                        border-radius:8px; padding:1rem; height:100%;">
-                <div style="font-size:1.4rem; margin-bottom:0.4rem;">{icon}</div>
-                <div style="font-size:0.83rem; font-weight:600; color:{C['text']};
-                            margin-bottom:0.35rem;">{title}</div>
-                <div style="font-size:0.78rem; color:{C['muted']}; line-height:1.5;">{desc}</div>
+            <div class="qa-box">
+                <div style="font-size:1.6rem; margin-bottom:0.5rem;">{icon}</div>
+                <div style="font-size:0.85rem; font-weight:700; color:{C['text']};
+                            margin-bottom:0.4rem; line-height:1.2;">{title}</div>
+                <div style="font-size:0.75rem; color:{C['muted']}; line-height:1.5;">{desc}</div>
             </div>""", unsafe_allow_html=True)
 
 
@@ -441,7 +460,7 @@ elif page == "Revenue per Kategori":
         for bar in bars:
             w = bar.get_width()
             ax.text(w + w * 0.01, bar.get_y() + bar.get_height() / 2,
-                    f"R${w/1e6:.2f}M", va="center", fontsize=8, color=C["muted"])
+                    f"R${w/1e6:.2f}M", va="center", fontsize=8.5, fontweight='500', color=C["text"])
         plt.tight_layout()
         st.pyplot(fig); plt.close()
 
@@ -457,7 +476,7 @@ elif page == "Revenue per Kategori":
         for bar in bars:
             w = bar.get_width()
             ax.text(w + max(w * 0.02, 3), bar.get_y() + bar.get_height() / 2,
-                    f"R${w:.0f}", va="center", fontsize=8, color=C["muted"])
+                    f"R${w:.0f}", va="center", fontsize=8.5, fontweight='500', color=C["text"])
         plt.tight_layout()
         st.pyplot(fig); plt.close()
 
@@ -541,7 +560,7 @@ elif page == "Segmentasi Pelanggan (RFM)":
             <div class="seg-badge" style="background:{c}15; border:1px solid {c}55; color:{c}; width:100%;">
                 <div class="val">{int(row['Pelanggan']):,}</div>
                 <div class="lbl">{row['segment']}</div>
-                <div style="font-size:0.68rem; margin-top:0.1rem; opacity:0.7;">{pct:.1f}%</div>
+                <div style="font-size:0.75rem; margin-top:0.15rem; opacity:0.85; font-weight:500;">{pct:.1f}%</div>
             </div>""", unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
@@ -563,7 +582,7 @@ elif page == "Segmentasi Pelanggan (RFM)":
             ax.text(bar.get_width() + total_cust_rfm * 0.005,
                     bar.get_y() + bar.get_height() / 2,
                     f"{int(row['Pelanggan']):,}  ({pct:.1f}%)",
-                    va="center", fontsize=8.5, color=C["muted"])
+                    va="center", fontsize=8.5, fontweight='500', color=C["text"])
         plt.tight_layout()
         st.pyplot(fig); plt.close()
 
@@ -580,7 +599,7 @@ elif page == "Segmentasi Pelanggan (RFM)":
         for bar in bars:
             w = bar.get_width()
             ax.text(w + w * 0.01, bar.get_y() + bar.get_height() / 2,
-                    f"R${w:.0f}", va="center", fontsize=8.5, color=C["muted"])
+                    f"R${w:.0f}", va="center", fontsize=8.5, fontweight='500', color=C["text"])
         plt.tight_layout()
         st.pyplot(fig); plt.close()
 
@@ -598,9 +617,9 @@ elif page == "Segmentasi Pelanggan (RFM)":
     w = 0.25
     fig, ax = fig_clean(11, 4)
     seg_clr = [SEG_COLOR.get(s, C["muted"]) for s in rfm_norm["segment"]]
-    ax.bar(x - w,   rfm_norm["Recency"],   width=w, color=C["primary"], alpha=0.85, label="Recency (inv.)")
-    ax.bar(x,       rfm_norm["Frequency"], width=w, color=C["green"],   alpha=0.85, label="Frequency")
-    ax.bar(x + w,   rfm_norm["Monetary"],  width=w, color=C["amber"],   alpha=0.85, label="Monetary")
+    ax.bar(x - w,   rfm_norm["Recency"],   width=w, color=C["primary"], alpha=0.9, label="Recency (inv.)")
+    ax.bar(x,       rfm_norm["Frequency"], width=w, color=C["green"],   alpha=0.9, label="Frequency")
+    ax.bar(x + w,   rfm_norm["Monetary"],  width=w, color=C["amber"],   alpha=0.9, label="Monetary")
     ax.set_xticks(x)
     ax.set_xticklabels(rfm_norm["segment"], rotation=20)
     ax.set_ylabel("Normalized Score (0–1)")
@@ -657,10 +676,10 @@ elif page == "Tren Bulanan":
     st.markdown('<div class="chart-title">Jumlah Pesanan per Bulan</div>', unsafe_allow_html=True)
     fig, ax = fig_clean(13, 3.8)
     x = np.arange(len(mo_df))
-    ax.bar(x, mo_df["total_orders"], color=C["primary"], alpha=0.3, width=0.7)
-    ax.plot(x, mo_df["total_orders"], color=C["primary"], linewidth=1.8, label="Jumlah Orders")
+    ax.bar(x, mo_df["total_orders"], color=C["primary"], alpha=0.25, width=0.7)
+    ax.plot(x, mo_df["total_orders"], color=C["primary"], linewidth=2, marker='o', markersize=4, label="Jumlah Orders")
     if show_ma and "orders_MA3" in mo_df.columns:
-        ax.plot(x, mo_df["orders_MA3"], color=C["red"], linewidth=2,
+        ax.plot(x, mo_df["orders_MA3"], color=C["amber"], linewidth=2,
                 linestyle="--", label="3-Month MA")
 
     # Annotate peak
@@ -669,8 +688,8 @@ elif page == "Tren Bulanan":
         f"Peak\n{int(mo_df['total_orders'].max()):,}",
         xy=(peak_x, mo_df["total_orders"].max()),
         xytext=(peak_x + 1.5, mo_df["total_orders"].max() * 1.05),
-        fontsize=8, color=C["red"],
-        arrowprops=dict(arrowstyle="->", color=C["red"], lw=1.2),
+        fontsize=8.5, color=C["text"], fontweight='bold',
+        arrowprops=dict(arrowstyle="->", color=C["text"], lw=1.2),
     )
 
     step = max(1, len(mo_df) // 10)
@@ -685,10 +704,10 @@ elif page == "Tren Bulanan":
     # Revenue trend
     st.markdown('<div class="chart-title">Total Revenue per Bulan</div>', unsafe_allow_html=True)
     fig, ax = fig_clean(13, 3.8)
-    ax.bar(x, mo_df["total_revenue"], color=C["green"], alpha=0.3, width=0.7)
-    ax.plot(x, mo_df["total_revenue"], color=C["green"], linewidth=1.8, label="Total Revenue")
+    ax.bar(x, mo_df["total_revenue"], color=C["green"], alpha=0.25, width=0.7)
+    ax.plot(x, mo_df["total_revenue"], color=C["green"], linewidth=2, marker='o', markersize=4, label="Total Revenue")
     if show_ma and "revenue_MA3" in mo_df.columns:
-        ax.plot(x, mo_df["revenue_MA3"], color=C["red"], linewidth=2,
+        ax.plot(x, mo_df["revenue_MA3"], color=C["amber"], linewidth=2,
                 linestyle="--", label="3-Month MA")
     ax.set_xticks(x[::step])
     ax.set_xticklabels(mo_df["year_month_str"].iloc[::step], rotation=35)
@@ -705,8 +724,8 @@ elif page == "Tren Bulanan":
     fig, ax = fig_clean(13, 3.2)
     growth_vals = mo_df["rev_growth"].iloc[1:].values
     bar_colors  = [C["green"] if v >= 0 else C["red"] for v in growth_vals]
-    ax.bar(range(len(growth_vals)), growth_vals, color=bar_colors, width=0.7, alpha=0.85)
-    ax.axhline(0, color=C["muted"], linewidth=0.8, linestyle="--")
+    ax.bar(range(len(growth_vals)), growth_vals, color=bar_colors, width=0.7, alpha=0.9)
+    ax.axhline(0, color=C["text"], linewidth=1, linestyle="-")
     ax.set_xticks(range(0, len(growth_vals), step))
     ax.set_xticklabels(mo_df["year_month_str"].iloc[1::step], rotation=35)
     ax.set_ylabel("Growth Rate (%)")
@@ -776,7 +795,7 @@ elif page == "Metode Pembayaran":
             ax.text(w + pay_df["count"].max() * 0.01,
                     bar.get_y() + bar.get_height() / 2,
                     f"{int(w):,}  ({row['pct']:.1f}%)",
-                    va="center", fontsize=8.5, color=C["muted"])
+                    va="center", fontsize=9, fontweight='500', color=C["text"])
         plt.tight_layout()
         st.pyplot(fig); plt.close()
 
@@ -797,7 +816,7 @@ elif page == "Metode Pembayaran":
             w = bar.get_width()
             ax.text(w + pay_df["avg_value"].max() * 0.01,
                     bar.get_y() + bar.get_height() / 2,
-                    f"R${w:.0f}", va="center", fontsize=8.5, color=C["muted"])
+                    f"R${w:.0f}", va="center", fontsize=9, fontweight='500', color=C["text"])
         plt.tight_layout()
         st.pyplot(fig); plt.close()
 
@@ -817,8 +836,8 @@ elif page == "Metode Pembayaran":
     for bar in bars:
         h = bar.get_height()
         ax.text(bar.get_x() + bar.get_width() / 2, h + pay_df["total_value"].max() * 0.01,
-                f"R${h/1e6:.2f}M", ha="center", fontsize=9,
-                fontweight="600", color=C["text"])
+                f"R${h/1e6:.2f}M", ha="center", fontsize=9.5,
+                fontweight="bold", color=C["text"])
     plt.tight_layout()
     st.pyplot(fig); plt.close()
 
@@ -883,20 +902,20 @@ elif page == "Pengiriman & Kepuasan":
         fig, ax = fig_clean(6.5, 4.5)
         bars = ax.bar(range(4), stats["avg"], color=cat_colors, width=0.55)
         avg_global = del_df["review_score"].mean()
-        ax.axhline(avg_global, color=C["muted"], linewidth=1.2, linestyle="--",
+        ax.axhline(avg_global, color=C["text"], linewidth=1.5, linestyle="--",
                    label=f"Rata-rata keseluruhan ({avg_global:.2f})")
         ax.set_xticks(range(4))
-        ax.set_xticklabels(short_lbl, fontsize=8.5)
+        ax.set_xticklabels(short_lbl, fontsize=9, fontweight='500')
         ax.set_ylabel("Avg Review Score")
         ax.set_ylim(1, 5.2)
         ax.legend(loc="upper right")
         ax.grid(axis="y"); ax.grid(axis="x", alpha=0)
         for i, (bar, row) in enumerate(zip(bars, stats.itertuples())):
             ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 0.05,
-                    f"{row.avg:.2f}", ha="center", fontsize=10,
-                    fontweight="600", color=cat_colors[i])
-            ax.text(bar.get_x() + bar.get_width() / 2, 1.1,
-                    f"n={row.n:,}", ha="center", fontsize=7.5, color=C["muted"])
+                    f"{row.avg:.2f}", ha="center", fontsize=11,
+                    fontweight="bold", color=cat_colors[i])
+            ax.text(bar.get_x() + bar.get_width() / 2, 0.5,
+                    f"n={row.n:,}", ha="center", fontsize=8, color="white", fontweight='bold')
         plt.tight_layout()
         st.pyplot(fig); plt.close()
 
@@ -910,17 +929,17 @@ elif page == "Pengiriman & Kepuasan":
         ]
         bp = ax.boxplot(
             box_data, patch_artist=True, notch=False,
-            medianprops=dict(color=C["text"], linewidth=1.8),
-            whiskerprops=dict(color=C["border"], linewidth=1),
-            capprops=dict(color=C["border"]),
+            medianprops=dict(color=C["text"], linewidth=2),
+            whiskerprops=dict(color=C["muted"], linewidth=1.5),
+            capprops=dict(color=C["muted"], linewidth=1.5),
             flierprops=dict(marker="o", markerfacecolor=C["border"],
-                            markersize=2.5, alpha=0.4, markeredgecolor="none"),
+                            markersize=3, alpha=0.5, markeredgecolor="none"),
         )
         for patch, color in zip(bp["boxes"], cat_colors):
-            patch.set_facecolor(color + "30")
+            patch.set_facecolor(color + "40")
             patch.set_edgecolor(color)
-            patch.set_linewidth(1.5)
-        ax.set_xticklabels(short_lbl, fontsize=8.5)
+            patch.set_linewidth(1.8)
+        ax.set_xticklabels(short_lbl, fontsize=9, fontweight='500')
         ax.set_ylabel("Review Score")
         ax.set_ylim(0.5, 5.8)
         ax.grid(axis="y"); ax.grid(axis="x", alpha=0)
@@ -940,12 +959,12 @@ elif page == "Pengiriman & Kepuasan":
 
     fig, ax = fig_clean(12, 4.5)
     ax.scatter(sample["delivery_days"], sample["review_score"],
-               c=dot_colors, alpha=0.18, s=10, edgecolors="none")
+               c=dot_colors, alpha=0.25, s=12, edgecolors="none")
 
     # Regression line
     z = np.polyfit(sample["delivery_days"], sample["review_score"], 1)
     xl = np.linspace(0, del_df["delivery_days"].quantile(0.99), 200)
-    ax.plot(xl, np.poly1d(z)(xl), color=C["text"], linewidth=2,
+    ax.plot(xl, np.poly1d(z)(xl), color=C["text"], linewidth=2.5,
             linestyle="--", label=f"Tren linear  (r = {corr_val:.3f})")
 
     # Legend
@@ -955,9 +974,9 @@ elif page == "Pengiriman & Kepuasan":
         for i in range(4)
     ]
     ax.legend(handles=legend_patches + [
-        plt.Line2D([0], [0], color=C["text"], linewidth=1.8,
+        plt.Line2D([0], [0], color=C["text"], linewidth=2.5,
                    linestyle="--", label=f"Tren (r={corr_val:.3f})")
-    ], fontsize=8.5, ncol=5, loc="upper right")
+    ], fontsize=9, ncol=5, loc="upper right")
 
     ax.set_xlabel("Lama Pengiriman (Hari)")
     ax.set_ylabel("Review Score")
@@ -980,7 +999,7 @@ elif page == "Pengiriman & Kepuasan":
 st.markdown("<br>", unsafe_allow_html=True)
 st.markdown(f"""
 <div style="border-top: 1px solid {C['border']}; padding-top: 1rem; margin-top: 1rem;
-            font-size: 0.75rem; color: {C['muted']}; text-align: center;">
+            font-size: 0.8rem; color: {C['muted']}; text-align: center; font-weight:500;">
     Dashboard Analisis Data · Olist Brazilian E-Commerce ·
     Chardinal Martin Butarbutar · Dicoding Data Analysis Project
 </div>""", unsafe_allow_html=True)
